@@ -1,0 +1,108 @@
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.ArrayList;
+
+public class Main {
+
+
+    private static ArrayList<Propietario> propietarios = new ArrayList<>();
+    static Color azulClaro = new Color(30, 58, 175);
+
+
+
+
+    public static void main(String[] args) {
+        JFrame frame = new JFrame("Propietarios");
+        ImageIcon icono = new ImageIcon("hogar.png");
+        frame.setIconImage(icono.getImage());
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setSize(425, 400);
+
+
+        JPanel panelPrincipal = new JPanel();
+        frame.add(panelPrincipal);
+        panelPrincipal.setBackground(azulClaro);
+        frame.add(panelPrincipal);
+        placeComponents(panelPrincipal);
+        frame.setVisible(true);
+    }
+
+
+    private static void placeComponents(JPanel panel) {
+        panel.setLayout(null);
+
+        JTextField idText = new JTextField(25);
+        idText.setBounds(100, 23, 160, 25);
+        panel.add(idText);
+
+        JLabel idLabel = new JLabel("ID Propietario:");
+        idLabel.setForeground(Color.white);
+        idLabel.setBounds(10, 20, 90, 25);
+        panel.add(idLabel);
+
+        JButton registerButton = new JButton("Registrar Propietario");
+        registerButton.setBounds(90, 60, 220, 35);
+        panel.add(registerButton);
+
+        JButton listButton = new JButton("Listar Propietarios");
+        listButton.setBounds(90, 100, 220, 35);
+        panel.add(listButton);
+
+        JButton searchButton = new JButton("Buscar Propietario");
+        searchButton.setBounds(90, 140, 220, 35);
+        panel.add(searchButton);
+
+
+        Color azulClaro = new Color(27, 149, 215, 255); // Color azul claro personalizado
+        JTextArea resultArea = new JTextArea();
+        resultArea.setBackground(azulClaro);
+        resultArea.setBounds(10, 185, 390, 150);
+        panel.add(resultArea);
+
+
+        registerButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String id = idText.getText();
+                Propietario propietario = new Propietario(id);
+                propietarios.add(propietario);
+                idText.setText("");
+                resultArea.setText("Propietario registrado con éxito: " + propietario.toString());
+                resultArea.setForeground(Color.white);
+            }
+        });
+
+        listButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                StringBuilder result = new StringBuilder();
+                result.append("Listado de Propietarios:\n");
+                for (Propietario propietario : propietarios) {
+                    result.append(propietario.toString()).append("\n");
+                }
+                resultArea.setText(result.toString());
+            }
+        });
+
+        searchButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String id = idText.getText();
+                Propietario foundPropietario = null;
+                for (Propietario propietario : propietarios) {
+                    if (propietario.getId_Propietario().equals(id)) {
+                        foundPropietario = propietario;
+                        break;
+                    }
+                }
+                if (foundPropietario != null) {
+                    resultArea.setText("Propietario encontrado: " + foundPropietario.toString());
+                } else {
+                    resultArea.setText("Propietario no encontrado");
+                }
+            }
+        });
+    }
+}
